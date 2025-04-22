@@ -676,6 +676,7 @@ async function init() {
 
   switch (global.currentPage) {
     case '/index.html':
+    case '/':
       // Check if the loader element exists
       if (loader) {
         loader.style.display = 'block'; // Show the loader initially
