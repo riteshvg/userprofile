@@ -675,7 +675,7 @@ async function init() {
   const loader = document.querySelector('#loader'); // Get the loader element
 
   switch (global.currentPage) {
-    case '/team.html':
+    case '/index.html':
       // Check if the loader element exists
       if (loader) {
         loader.style.display = 'block'; // Show the loader initially
