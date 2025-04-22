@@ -76,6 +76,7 @@ function deactivateAllButtons() {
  * displayUserDetails()
  * displayUserPosts()
  * displayUserTodos()
+ * displayPostsComments()
  */
 
 //Async function to fetch and display all users
@@ -149,6 +150,23 @@ async function displayUserPosts(userId) {
   }
 }
 
+//Async function to display post comments
+async function displayPostsComments(postId) {
+  console.log(`Fetching comments for post ID: ${postId}`);
+  if (!postId) {
+    console.warn('Post ID is missing!');
+    return [];
+  }
+  try {
+    const response = await fetch(`${API_URL}comments/post/${postId}`);
+    const commentData = await response.json();
+    return commentData.comments;
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return [];
+  }
+}
+
 //Async function to display single user todos
 async function displayUserTodos() {
   if (!userId) return;
@@ -162,13 +180,13 @@ async function displayUserTodos() {
 }
 
 //Update UI Functions
-//UI Update Functions
 /**
  *
  * updateUserProfile()
  * updatePersonalDetails()
  * updateCompanyDetails()
  * updateBlogDetails()
+ * updatecommentDetails()
  * updateTodoDetails()
  */
 function updateUserProfile(userDetails) {
@@ -206,12 +224,6 @@ function updatePersonalDetails(userDetails) {
                 <i class="fa fa-home"></i> | <span>${userDetails.firstName}'s Personal Profile</span>
               </h1>
             </div>
-            <div class="feature__item">
-                <div class="feature__icon">
-                  
-                </div>
-          </div>
-
       <div class="row">
         <div class="col-sm-12">
           <div id = "personalTable">
@@ -293,10 +305,6 @@ function updateCompanyDetails(userDetails) {
                 <i class="fa fa-briefcase"></i> | <span>${userDetails.firstName}'s Work Profile</span>
               </h1>
             </div>
-            <div class="feature__item">
-                <div class="feature__icon">
-                  
-                </div>
           </div>
 
       <div class="row">
@@ -370,6 +378,11 @@ function updateBlogDetails(blogData) {
 
   if (!blogData.posts || blogData.posts.length === 0) {
     blogDetails.innerHTML = `
+    <div class="col-sm-12">
+              <h1 class="block-header alt">
+                <i class="fa fa-home"></i> | <span>${userDetails.firstName}'s Personal Profile</span>
+              </h1>
+            </div>
     <div class="card mb-3">
         <div class="card-body text-center text-muted">
           <i class="fa fa-newspaper-o fa-3x mb-3"></i>
@@ -382,32 +395,67 @@ function updateBlogDetails(blogData) {
   }
 
   blogData.posts.forEach((post) => {
+    let commentsHTML = '';
     let tagsHTML = '';
+
     //Generate tags HTML using forEach
     post.tags.forEach((tag) => {
       tagsHTML += `<li><a href="#">${tag}</a></li>  `;
     });
 
+    //Get comments for this post
+    displayPostsComments(post.id).then((comments) => {
+      console.log(`Comments recieve for post ${post.id}:`, comments);
+      if (comments && comments.length > 0) {
+        comments.forEach((comment) => {
+          commentsHTML += `
+          <div class="comments__item">
+              <div class="comments-item__body">
+                <div class="comments-item__info">
+                  <div class="comments-item-info__author">${comment.user.username}</div>
+                  <div class="comments-item-info__divider">
+                    <i class="fa fa-circle"></i>
+                  </div>
+                  <div class="comments-item__likes">
+                    <i class="fa fa-thumbs-up"></i> ${comment.likes}
+                  </div>
+                </div>
+                <div class="comments-item__content">
+                  ${comment.body}
+                </div>
+              </div>
+            </div>
+
+          `;
+        });
+      }
+
+      //Update the comments section for this post
+      const commentSection = document.querySelector(`#comments-${post.id}`);
+      if (commentSection) {
+        commentSection.innerHTML = commentsHTML || ' No comments yet';
+      }
+    });
+
     postsHTML += `
     <div class="blog__item">
-            <div class="blog__header">
-              <h2 class="blog__title">
+            <div>
+              <h2 class="block-header alt">
                   <span>${post.title}</span>
               </h2>
-              
-              <ul class="blog__tags">
-              <li>${tagsHTML}</li>
-              </ul>
             </div> <!-- / .blog__header -->
 
-            <div class="blog__body">
+            <div>
               <a href="blog-post.html">
               </a>
               <p>
                 ${post.body}
               </p>
+              <ul class="blog__tags">
+              <li>${tagsHTML}</li>
+              </ul>
             </div> <!-- / .blog__body -->
-            <div class="blog__footer">
+            <div class="blog__footer pull-right">
               <ul class="blog__info">
               <li>
                   <i class="fa fa-eye"></i> <a href="#">${post.views}</a>
@@ -419,39 +467,13 @@ function updateBlogDetails(blogData) {
                   <i class="fa fa-thumbs-down"></i>${post.reactions.dislikes}</time>
                 </li>
               </ul>
-            </div> <!-- / .blog__footer -->
-            <hr>
-
-            <div class = "pull-left"> <!-- /.Comments -->
-                <p>Comments</p>
-                <div class="comments__item">
-                <div class="comments-item__body">
-                  <div class="comments-item__info">
-                    <div class="comments-item-info__author">Jane Doe</div>
-                    <div class="comments-item-info__divider">
-                      <i class="fa fa-circle"></i>
-                    </div>
-                    <div class="comment-item-info__timestamp">3 hours ago</div>
-                  </div>
-
-                  <div class="comments-item__content">
-                    Nunc sagittis in est malesuada finibus. Aliquam non metus nec nisi auctor vulputate eget at purus. Morbi mattis nisl elit, id egestas magna viverra ut. Nunc condimentum porttitor tortor a tempus.
-                  </div>
-
-                  <div class="comments-item__actions">
-                    <a href="#" class="comment-item-actions__reply">
-                      Reply
-                    </a>
-                  </div>
-                </div>
-
-              </div> <!-- / .comments__item -->
-              </div>
-
-          </div> <!-- / .blog__item -->
-          
-        </div>
-      </div>
+            </div>
+            
+            <div class = "comments-section">
+            <h4 class = "block-header alt">Comments</h4>
+            <div id ="comments-${post.id}"></div>
+            </div>
+          </div>
       <p>
     `;
   });
@@ -504,7 +526,7 @@ function updateTodoDetails(todoData) {
     `;
   });
   todoDetails.innerHTML = `
-  <h3 class = "section-title">Todo List</h3>
+  <h3 class = "block-header alt">Todo List</h3>
   <div class = "todos-container">
     ${todosHTML}
   </div>
