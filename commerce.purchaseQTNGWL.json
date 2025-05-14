@@ -1,0 +1,182 @@
+[
+  {
+    "xdm": {
+      "eventType": "commerce.purchases",
+      "_experience": {
+        "decisioning": {
+          "propositions": [
+            {
+              "id": "AT:eyJhY3Rpdml0eUlkIjoiNzIyNjYzIiwiZXhwZXJpZW5jZUlkIjoiMCJ9",
+              "scope": "__view__",
+              "scopeDetails": {
+                "decisionProvider": "TGT",
+                "activity": {
+                  "id": "722663"
+                },
+                "experience": {
+                  "id": "0"
+                },
+                "strategies": [
+                  {
+                    "step": "entry",
+                    "trafficType": "0"
+                  },
+                  {
+                    "step": "display",
+                    "trafficType": "0"
+                  },
+                  {
+                    "step": "conversion",
+                    "trafficType": "0"
+                  }
+                ],
+                "characteristics": {
+                  "eventToken": "W33NfSPbhtp4fILGZxBweJ3BNhkKdJh9FdggP2851ydw54XAlJ3xNRImNE7jBWgsDTUtuHiy7Y7RiRmHjST6IQ=="
+                },
+                "correlationID": "722663:0:0"
+              }
+            },
+            {
+              "scope": "CONFIRMATION",
+              "scopeDetails": {
+                "characteristics": {
+                  "scopeType": "view"
+                }
+              }
+            }
+          ],
+          "propositionEventType": {
+            "display": 1
+          }
+        },
+        "analytics": {
+          "event1to100": {
+            "event1": {
+              "value": 1
+            },
+            "event73": {
+              "value": 1
+            },
+            "event94": {
+              "id": "ff87918f-1641-4903-afb0-5277582c4b11",
+              "value": 298
+            }
+          },
+          "customDimensions": {
+            "eVars": {
+              "eVar5": "https://travel.airindia.com/ssci/overview?PPID=S31GIOOUMWCKQKCLECE8H877CW97056D",
+              "eVar6": "CONFIRMATION",
+              "eVar7": "OVERVIEW",
+              "eVar8": "Repeat",
+              "eVar10": "RefX",
+              "eVar24": "Checkin",
+              "eVar29": "QTNGWL",
+              "eVar30": "ff87918f-1641-4903-afb0-5277582c4b11",
+              "eVar44": "Card | Visa",
+              "eVar49": "Mac",
+              "eVar50": "desktop",
+              "eVar51": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+              "eVar82": "unauthenticated",
+              "eVar86": "below 3 seconds",
+              "eVar151": "fd9d6451-59c7-4f08-8db6-1c29677f4d53",
+              "eVar140": "commerce.purchases"
+            },
+            "props": {
+              "prop2": "OVERVIEW",
+              "prop3": "https://travel.airindia.com/ssci/overview?PPID=S31GIOOUMWCKQKCLECE8H877CW97056D",
+              "prop4": "CONFIRMATION",
+              "prop5": "RefX",
+              "prop6": "Checkin",
+              "prop25": "fd9d6451-59c7-4f08-8db6-1c29677f4d53",
+              "prop19": "1920 x 1080 | landscape"
+            }
+          },
+          "event101to200": {
+            "event160": {
+              "value": 1
+            }
+          }
+        }
+      },
+      "web": {
+        "webPageDetails": {
+          "URL": "https://travel.airindia.com/ssci/overview?PPID=S31GIOOUMWCKQKCLECE8H877CW97056D",
+          "name": "OVERVIEW",
+          "pageViews": {
+            "value": 1
+          },
+          "siteSection": "RefX"
+        },
+        "webReferrer": {
+          "URL": "https://canvas.plusgrade.com/offers/airline/partner/xWCog8r3AI/5qpbFiMShIBpRMwDPigpyYlogRT9u4LVas/web-checkin?apiKey=tyhEh6proj7dG6Nz1bgbMTfe&lang=en&callbackUrl=https%3A%2F%2Ftravel.airindia.com%2Fssci%2Fjourney-selection"
+        }
+      },
+      "device": {
+        "screenHeight": 1080,
+        "screenWidth": 1920,
+        "screenOrientation": "landscape"
+      },
+      "environment": {
+        "type": "browser",
+        "browserDetails": {
+          "viewportWidth": 856,
+          "viewportHeight": 968
+        }
+      },
+      "placeContext": {
+        "localTimezoneOffset": -330,
+        "localTime": "2025-04-25T14:09:30.544+05:30"
+      },
+      "timestamp": "2025-04-25T08:39:30.544Z",
+      "implementationDetails": {
+        "name": "https://ns.adobe.com/experience/alloy/reactor",
+        "version": "2.19.1+2.21.3",
+        "environment": "browser"
+      },
+      "commerce": {
+        "order": {
+          "purchaseID": "ff87918f-1641-4903-afb0-5277582c4b11",
+          "currencyCode": "INR"
+        },
+        "purchases": {
+          "id": "ff87918f-1641-4903-afb0-5277582c4b11",
+          "value": 1
+        }
+      },
+      "productListItems": [
+        {
+          "lineItemId": "AncillaryService",
+          "SKU": "SEAT",
+          "quantity": 1,
+          "priceTotal": 199,
+          "_experience": {
+            "analytics": {
+              "customDimensions": {
+                "eVars": {
+                  "evar35": "SEAT",
+                  "eVar97": "BLR-BOM"
+                }
+              }
+            }
+          }
+        },
+        {
+          "lineItemId": "AncillaryService",
+          "SKU": "SEAT",
+          "quantity": 1,
+          "priceTotal": 99,
+          "_experience": {
+            "analytics": {
+              "customDimensions": {
+                "eVars": {
+                  "evar35": "SEAT",
+                  "eVar97": "BLR-BOM"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -7,7 +7,7 @@ const global = {
     apiURL: 'https://dummyjson.com/',
   },
   users: [], // stores all users
-  usersPerPage: 8, // sets a limit of 8 users per page
+  usersPerPage: 12, // sets a limit of 8 users per page
   currentPageNum: 1, //starts with index of 1
   isLoading: false, //Add a loading state
   API_URL: 'https://dummyjson.com/',
@@ -50,6 +50,7 @@ function hideAllSections() {
     companyProfile: document.querySelector('#companyProfileSection'),
     blog: document.querySelector('#blogSection'),
     todos: document.querySelector('#todoSection'),
+    cart: document.querySelector('#cartSection'),
   };
 
   Object.values(sections).forEach((section) => {
@@ -63,6 +64,7 @@ function deactivateAllButtons() {
     companyProfile: document.querySelector('#companyProfileButton'),
     blog: document.querySelector('#blogDetailsButton'),
     todos: document.querySelector('#todoDetailsButton'),
+    cart: document.querySelector('cartDetailsButton'),
   };
 
   Object.values(buttons).forEach((button) => {
@@ -77,6 +79,7 @@ function deactivateAllButtons() {
  * displayUserPosts()
  * displayUserTodos()
  * displayPostsComments()
+ * displayUserCarts()
  */
 
 //Async function to fetch and display all users
@@ -179,6 +182,20 @@ async function displayUserTodos() {
   }
 }
 
+//Asyn function to dispaly user carts
+async function displayUserCarts() {
+  if (!userId) return;
+  try {
+    const response = await fetch(`${API_URL}users/${userId}/carts`);
+    const data = await response.json();
+    const cartData = data.carts;
+    updateCartDetails(cartData);
+    console.log(cartData);
+  } catch (error) {
+    console.error('Error fetching user carts: ', error);
+  }
+}
+
 //Update UI Functions
 /**
  *
@@ -188,6 +205,7 @@ async function displayUserTodos() {
  * updateBlogDetails()
  * updatecommentDetails()
  * updateTodoDetails()
+ * updateCartDetails()
  */
 function updateUserProfile(userDetails) {
   const userSideProfile = document.querySelector('.profile__aside');
@@ -378,11 +396,6 @@ function updateBlogDetails(blogData) {
 
   if (!blogData.posts || blogData.posts.length === 0) {
     blogDetails.innerHTML = `
-    <div class="col-sm-12">
-              <h1 class="block-header alt">
-                <i class="fa fa-home"></i> | <span>${userDetails.firstName}'s Personal Profile</span>
-              </h1>
-            </div>
     <div class="card mb-3">
         <div class="card-body text-center text-muted">
           <i class="fa fa-newspaper-o fa-3x mb-3"></i>
@@ -533,6 +546,79 @@ function updateTodoDetails(todoData) {
   `;
 }
 
+function updateCartDetails(cartData) {
+  const cartDetails = document.querySelector('#cartDetails');
+  const productDetails = document.querySelector('#productDetails');
+  let productListHTML = '';
+  let totalQuantity = 0;
+  let totalCost = 0;
+  let totalDiscount = 0;
+
+  if (!cartData || !Array.isArray(cartData) || cartData.length === 0) {
+    cartDetails.innerHTML = `
+    <div class = "card mb-3">
+      <div class = "card-body text-center text-muted">
+        <i class = "fa fa-shopping-cart fa-3x mb-3"></i>
+          <h5>Your cart is waiting!</h5>
+          <p>No products found for the user</p>
+      </div>
+    </div> 
+    `;
+    return;
+  }
+
+  //Cart Details
+  cartData.forEach((cart) => {
+    totalQuantity += cart.totalProducts;
+    totalCost += cart.total;
+    totalDiscount += cart.discountedTotal;
+
+    cartDetails.innerHTML = `
+    <div class="cart-item">
+     <div class="cart-item__summary">
+     <tr width = "100%" border="1">
+      <td><b># of Units Purchased:</b> <span>${totalQuantity}</span> <em>| </em></td>
+      <td><b>Price Paid:</b> $${totalCost.toFixed(2)} <em> | </em> </td>
+      <td><b>Discount Received: </b> $${totalDiscount.toFixed(2)}</td>
+     </tr>
+       
+     </div>
+   </div>
+ `;
+
+    //Product Details
+    cart.products.forEach((product) => {
+      productListHTML += `
+      <div class = "row">
+      <div class="col-sm-6 col-md-6 card">
+        
+          <div class="pricing__item">
+            <div class="pricing__header">
+              <img src = ${product.thumbnail}>
+            </div>
+            <div class="pricing__header">
+            ${product.title}
+            </div>
+            <div class="pricing__features">
+              <ul>
+              <li><i>$</i>${product.price}</li>
+                <li>
+                  Quantity: ${product.quantity}.
+                </li>
+                <li>Total: ${product.total}</li>
+                <li>Discounted Total: ${product.discountedTotal}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </div>
+      `;
+    });
+
+    productDetails.innerHTML = `${productListHTML}`;
+  });
+}
+
 //UI Update Functions
 /**
  * updateButtonHref()
@@ -634,6 +720,7 @@ function attachEventListeners() {
     companyProfile: document.querySelector('#companyProfileButton'),
     blog: document.querySelector('#blogDetailsButton'),
     todo: document.querySelector('#todoDetailsButton'),
+    cart: document.querySelector('#todoCartButton'),
   };
 
   buttons.personalProfile?.addEventListener('click', () => {
@@ -664,6 +751,14 @@ function attachEventListeners() {
     document.querySelector('#todoSection').style.display = 'block';
     buttons.todo.classList.add('active');
     displayUserTodos(userId);
+  });
+
+  buttons.cart?.addEventListener('click', () => {
+    hideAllSections();
+    deactivateAllButtons();
+    document.querySelector('#cartSection').style.display = 'block';
+    buttons.cart.classList.add('active');
+    displayUserCarts(userId);
   });
 }
 
